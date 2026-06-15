@@ -12,7 +12,7 @@ export const locationBubbles: LocationBubble[] = [
     top: "22%",
     left: "58%",
     delay: "0s",
-    cityImageUrl: "https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&q=80&w=150"
+    cityImageUrl: "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?auto=format&fit=crop&q=80&w=150"
   },
   {
     city: "厦门",
@@ -38,7 +38,7 @@ export const locationBubbles: LocationBubble[] = [
     top: "43%",
     left: "64%",
     delay: "1.5s",
-    cityImageUrl: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&q=80&w=150"
+    cityImageUrl: "https://images.unsplash.com/photo-1528164344705-47542687000d?auto=format&fit=crop&q=80&w=150"
   },
   {
     city: "成都",
@@ -95,7 +95,7 @@ export const recentMemories: MemoryCard[] = [
     song_title: "平凡之路",
     artist: "朴树",
     date: "2024.08.15",
-    coverUrl: "https://images.unsplash.com/photo-1528362627038-769a68a2bf75?auto=format&fit=crop&q=80&w=400",
+    coverUrl: "https://images.unsplash.com/photo-1528164344705-47542687000d?auto=format&fit=crop&q=80&w=400",
     weather: "wb_twilight",
     city: "杭州"
   }
@@ -192,7 +192,7 @@ export const reportSlides: ReportSlide[] = [
     bgColor: "from-indigo-950 via-slate-900 to-violet-950 text-white",
     imageTheme: "space",
     footerTag: "向上滑动, 唤醒这一年",
-    imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDnk9F12OjYc8OXTgxhQ6JimNa3s7uIpizbLIcg8jCzDH6Vo6EUxZWUWyEtcoyUHkbYVcZiwwZrZAajqvrb9AOahLYK0EG2JtJg2rhPakNVXrZI8DkNAAo0KOIPGV3cQ_dSQMNrqpn_MlOTrO9XYikIB7pjlbEJV1sJ5hbEz9NwCjEJBUxbYgMVaxCMYLyjTW8ucaBZ7UUEp6oyFu2voVcCD-niV7VCSQrHqqm8nPNkzigaWvk0wFqRGg"
+    imageUrl: "https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?auto=format&fit=crop&q=80&w=600"
   },
   {
     id: 2,
@@ -202,7 +202,7 @@ export const reportSlides: ReportSlide[] = [
     bgColor: "from-teal-950 via-cyan-900 to-emerald-950 text-white",
     imageTheme: "tokyo",
     footerTag: "12个坐标 · 847首心动旋律",
-    imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuCs2y7npyaizkaiIRl84g4M2Zrp6_8aqLSkfKdFjDfmJCHpNWDH4H7-tTvQZ7T5O9qJjI4k_OdK9RNBN4dCM0ELvJ9_tzqNrBvb1ESYS9Kf5TzvYKjjelGIzqyQJo5wSv7-RsuY6g6GbIc28bU9rVHU8Nxl8y9ENKb4jllIga8fKLjANOA-wYpPxo0eVKF7QwYjezCgsj4eIBEtwNWuB7L4Jq500LegOSLwBh9Jie4rgpy9oU1kM_OcQg"
+    imageUrl: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&q=80&w=600"
   },
   {
     id: 3,
@@ -212,7 +212,7 @@ export const reportSlides: ReportSlide[] = [
     bgColor: "from-blue-950 via-indigo-950 to-slate-900 text-white",
     imageTheme: "otaru",
     footerTag: "4,218公里外 · 《夜に駆ける》",
-    imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuASjQC5M0DYUu-pBU4EnltoWTt1LzU_fpwvx5KM0COi3yXyuvDjr2sMkdav-xea18n_HQnutHUWItcqdGFWk6Ol1p3jb-MG_L6ayyrn_qQaMDvzAfOxGBVsy4JyOhftsk61YFo3VxUNADGOzYYUe2Vf-J_3H9eah4QPSRaUt7ck4hQU1muD0NRnuNDhevrMnEkK8j0CV1e7P4ZsOwOdBIF5vmbrGBmE0acfEPeQOmy8RyvzHzL7Wb8kJA"
+    imageUrl: "https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?auto=format&fit=crop&q=80&w=600"
   },
   {
     id: 4,
@@ -242,6 +242,6 @@ export const reportSlides: ReportSlide[] = [
     bgColor: "from-indigo-950 via-indigo-900 to-black text-white",
     imageTheme: "vinyl",
     footerTag: "EchoFilm · 2027 继续出发",
-    imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDnk9F12OjYc8OXTgxhQ6JimNa3s7uIpizbLIcg8jCzDH6Vo6EUxZWUWyEtcoyUHkbYVcZiwwZrZAajqvrb9AOahLYK0EG2JtJg2rhPakNVXrZI8DkNAAo0KOIPGV3cQ_dSQMNrqpn_MlOTrO9XYikIB7pjlbEJV1sJ5hbEz9NwCjEJBUxbYgMVaxCMYLyjTW8ucaBZ7UUEp6oyFu2voVcCD-niV7VCSQrHqqm8nPNkzigaWvk0wFqRGg"
+    imageUrl: "https://images.unsplash.com/photo-1484755560693-a4074577af3a?auto=format&fit=crop&q=80&w=600"
   }
 ];

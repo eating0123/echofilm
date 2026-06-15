@@ -15,7 +15,9 @@ import {
   Sparkles, 
   Music, 
   Play, 
-  RefreshCw 
+  RefreshCw,
+  Menu,
+  Settings
 } from 'lucide-react';
 import { timelineNodes } from '../data';
 import { ActivePage, TimelineNode } from '../types';
@@ -84,7 +86,7 @@ export default function TimelineView({ onNavigate }: TimelineViewProps) {
           >
             <div className="relative mb-8 flex items-center justify-center w-28 h-28 bg-indigo-500/20 rounded-full border border-indigo-500/40">
               <Mic size={42} className="text-white animate-pulse" />
-              <div className="absolute inset-0 rounded-full bg-indigo-500 scale-125 opacity-10 animate-ping" />
+              <div className="absolute inset-0 rounded-full bg-indigo-50 scale-125 opacity-10 animate-ping" />
             </div>
 
             <h3 className="font-display font-black text-[18px] mb-2 tracking-wide text-center">
@@ -110,49 +112,54 @@ export default function TimelineView({ onNavigate }: TimelineViewProps) {
       </AnimatePresence>
 
       {/* Primary header navbar */}
-      <header className="absolute top-0 left-0 right-0 h-16 z-30 bg-white/85 backdrop-blur-md border-b border-slate-100 flex justify-between items-center px-4 shadow-sm">
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => onNavigate('map')}
-            className="text-slate-800 hover:opacity-80 transition-opacity w-8 h-8 flex items-center justify-center rounded-full bg-slate-100/80"
-          >
-            <ArrowLeft size={18} />
-          </button>
-          <span className="font-display font-black text-slate-800 text-[15px] tracking-tight">
-            厦门三日 · 旅程日记
-          </span>
-        </div>
-        <div className="text-[10px] bg-indigo-50 text-indigo-600 px-2 py-1 rounded-md font-bold">已同步</div>
+      <header className="absolute top-0 left-0 right-0 h-16 z-30 bg-white/85 backdrop-blur-md border-b border-slate-100 flex justify-between items-center px-4">
+        <button
+          onClick={() => alert('菜单功能正在开发中')}
+          className="text-slate-800 hover:opacity-85 transition-opacity flex items-center justify-center w-10 h-10 rounded-full"
+          aria-label="菜单"
+        >
+          <Menu size={22} />
+        </button>
+        <span className="font-display font-black text-indigo-900 text-[16px] tracking-tight">
+          My EchoFilm
+        </span>
+        <button
+          onClick={() => alert('设置页面正在设计中')}
+          className="text-slate-800 hover:opacity-85 transition-opacity flex items-center justify-center w-10 h-10 rounded-full"
+          aria-label="设置"
+        >
+          <Settings size={18} />
+        </button>
       </header>
 
       {/* Main scrolling wrapper */}
-      <div className="flex-1 overflow-y-auto no-scrollbar pt-16 pb-44">
+      <div className="flex-1 overflow-y-auto no-scrollbar pt-16 pb-40">
         {/* Parallax shoreline sunset background */}
-        <section className="relative h-[200px] w-full flex flex-col justify-end p-5 overflow-hidden">
+        <section className="relative h-[220px] w-full flex flex-col justify-end p-5 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-tr from-slate-900 via-indigo-900 to-amber-700 z-0">
             <img
               alt="鼓浪屿海边夕阳"
               referrerPolicy="no-referrer"
-              className="w-full h-full object-cover opacity-50 select-none"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQtibjsROeUnP4NGjTfHsyOVKYj9967v18Wg1hthylt73d4JP7BNDEXpC-UxADMokhd3X0ySriSEz6fCH8ESyHZU3pdaTQqSz2aU0INnbE0m9j0NxCtLkgxzBqW19zUj9XTZqpSojcRwPDtaoCRHgQeX18lZghB2BDwAOHJ4F_1bPCZG-KcHomRuVJRsBoTF35dfgu9gwUJiV9EtXoKMIQwCJDZldTkNe5bCQ46NwKLODBduswol_GuaR1iBVSYdy8zgy9PNNVCkhR"
+              className="w-full h-full object-cover opacity-60 select-none"
+              src="https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&q=80&w=600"
             />
           </div>
           
-          <div className="relative z-10 text-white space-y-1">
-            <h2 className="font-display font-black text-[22px] tracking-tight leading-none text-white drop-shadow-md">
-              厦门三日 · 声音记忆
+          <div className="relative z-10 text-white space-y-1 pb-4">
+            <h2 className="font-display font-black text-[23px] tracking-tight leading-none text-white drop-shadow-md">
+              厦门三日 · 音乐日记
             </h2>
-            <p className="text-[9px] font-bold text-slate-200 font-mono tracking-widest uppercase">
-              2026.04.02 - 04.04 · 3天 · 12个坐标 · 18首曲
+            <p className="text-[9.5px] font-bold text-slate-200 uppercase tracking-wider">
+              2026.04.02 - 04.04 · 3天 · 12个地点 · 18首歌
             </p>
           </div>
         </section>
 
-        {/* Narrative core block quotes */}
-        <section className="px-5 mt-4 mb-5">
-          <div className="bg-white rounded-2xl p-4 border border-slate-150 border-l-4 border-l-indigo-600 shadow-sm">
-            <p className="font-serif italic text-slate-700 text-[13.5px] leading-relaxed">
-              “有些事情你会拍照留念，但那些你忘记拿起手机的温柔瞬间，声音已替你悄悄记住。”
+        {/* Narrative core block quotes overlay */}
+        <section className="px-5 -mt-6 relative z-20 mb-5">
+          <div className="bg-white rounded-2xl p-4 border border-indigo-100 shadow-md">
+            <p className="font-serif italic text-indigo-600 text-[13px] leading-relaxed">
+              音乐记得那些你忘了拍照的瞬间。
             </p>
           </div>
         </section>
@@ -160,29 +167,29 @@ export default function TimelineView({ onNavigate }: TimelineViewProps) {
         {/* Vertical Timeline logs */}
         <section className="px-5 relative">
           {/* Continuous left border line */}
-          <div className="absolute left-[26px] top-2 bottom-4 w-[2px] bg-gradient-to-b from-indigo-500 via-amber-400 to-slate-200 rounded-full opacity-40" />
+          <div className="absolute left-[26px] top-2 bottom-4 w-[2px] bg-indigo-100 rounded-full" />
 
           {timelineNodes.map((node) => (
-            <div key={node.day} className="relative pl-9 mb-7">
+            <div key={node.day} className="relative pl-9 mb-6">
               {/* Timeline active sphere dot */}
               <div
-                className="absolute left-[19px] top-1.5 w-[14px] h-[14px] rounded-full ring-4 ring-white shadow-md z-10"
+                className="absolute left-[20px] top-1.5 w-[14px] h-[14px] rounded-full ring-4 ring-white shadow-md z-10"
                 style={{ backgroundColor: node.colorHex }}
               />
 
               <div
-                className="bg-white border border-slate-150 rounded-2xl p-4.5 shadow-sm flex flex-col gap-3"
+                className="bg-white border border-slate-100 rounded-2xl p-4.5 shadow-sm flex flex-col gap-3"
               >
                 {/* Header segment */}
                 <div className="flex justify-between items-start">
                   <div>
                     <span
-                      className="text-[9.5px] font-bold uppercase tracking-wider font-mono block mb-0.5"
+                      className="text-[9px] font-bold uppercase tracking-wider block mb-0.5"
                       style={{ color: node.colorHex }}
                     >
                       第{node.day}天 · {node.stageName}
                     </span>
-                    <h3 className="font-display font-extrabold text-[14px] text-slate-800 leading-none">
+                    <h3 className="font-display font-extrabold text-[14.5px] text-slate-800 leading-none">
                       {node.title}
                     </h3>
                   </div>
@@ -193,13 +200,9 @@ export default function TimelineView({ onNavigate }: TimelineViewProps) {
 
                 {/* Sub info progress panel inside Day 2 */}
                 {node.infoLabel && (
-                  <div className="bg-amber-50/50 rounded-xl p-3 border border-amber-100 flex flex-col gap-1.5">
+                  <div className="bg-amber-50/40 rounded-xl p-3 border border-amber-100/55 flex flex-col gap-1.5">
                     <div className="flex items-center justify-between text-amber-800 text-[10px] font-bold">
-                      <span>累计听歌 3小时42分钟</span>
-                      <span className="font-mono">进度 78%</span>
-                    </div>
-                    <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden animate-pulse">
-                      <div className="h-full bg-amber-400 rounded-full w-[78%]" />
+                      <span>累计聆听 3h 42m</span>
                     </div>
                   </div>
                 )}
@@ -217,7 +220,7 @@ export default function TimelineView({ onNavigate }: TimelineViewProps) {
                       <button
                         key={song}
                         onClick={() => handleSongClick(song)}
-                        className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10.5px] font-semibold transition-all outline-none ${isSongActive ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm scale-102' : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-indigo-200'}`}
+                        className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10.5px] font-semibold transition-all outline-none ${isSongActive ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm scale-102' : 'bg-slate-50 text-slate-700 border-slate-200/80 hover:border-indigo-200'}`}
                       >
                         {isSongActive ? (
                           <RefreshCw size={11} className="animate-spin text-white" />
@@ -238,23 +241,15 @@ export default function TimelineView({ onNavigate }: TimelineViewProps) {
         <section className="px-5 mt-4 space-y-2.5">
           <button
             onClick={() => alert('🎵 正在为你缓存并生成“厦门三日·18首音乐回忆歌单”...')}
-            className="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs shadow-md active:scale-95 transition-all flex items-center justify-center gap-1.5"
+            className="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs shadow-md active:scale-95 transition-all flex items-center justify-center gap-1.5 shadow-indigo-600/10"
           >
             <Play size={13} />
             <span>开启旅程广播</span>
           </button>
-          
-          <button
-            onClick={() => onNavigate('postcard')}
-            className="w-full h-11 border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl font-bold text-xs active:scale-95 transition-all bg-white flex items-center justify-center gap-1.5"
-          >
-            <Mail size={13} />
-            <span>定制声音明信片</span>
-          </button>
         </section>
       </div>
 
-      {/* Floating Audio Micro Trigger button - Styled beautifully and cleanly */}
+      {/* Floating Audio Micro Trigger button */}
       <div className="absolute bottom-24 right-5 z-40">
         <button
           onClick={handleMicClick}
