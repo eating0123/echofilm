@@ -242,6 +242,6 @@ export const reportSlides: ReportSlide[] = [
     bgColor: "from-indigo-950 via-indigo-900 to-black text-white",
     imageTheme: "vinyl",
     footerTag: "EchoFilm · 2027 继续出发",
-    imageUrl: "https://images.unsplash.com/photo-1484755560693-a4074577af3a?auto=format&fit=crop&q=80&w=600"
+    imageUrl: "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&q=80&w=600"
   }
 ];
