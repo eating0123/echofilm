@@ -1,0 +1,6 @@
+{
+  "name": "EchoFilm",
+  "description": "音乐版的普鲁斯特效应引擎 - Sound and music memory system that maps your life soundtracks with physical locations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
