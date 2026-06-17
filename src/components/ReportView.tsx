@@ -100,7 +100,7 @@ export default function ReportView({ onNavigate }: ReportViewProps) {
                     transition={{ duration: 0.6 }}
                     className="font-display font-extrabold text-[21px] tracking-tight text-white leading-snug drop-shadow-md"
                   >
-                    小林，247次的触地温存里，耳朵替你走过了许多路
+                    小王，247次的触地温存里，耳朵替你走过了许多路
                   </motion.h2>
 
                   <div className="w-12 h-[3px] bg-indigo-500 mx-auto rounded-full" />

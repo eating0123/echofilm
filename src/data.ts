@@ -386,7 +386,7 @@ export const timelineTrips: TimelineTrip[] = [
 export const reportSlides: ReportSlide[] = [
   {
     id: 1,
-    title: "小林，2026年",
+    title: "小王，2026年",
     subtitle: "你的音乐足迹跨越了很多地方",
     content: "那是一些你不曾留意，但是由声音替你篆刻在灵魂褶皱里的专属时钟。往上滑动，重温今年你和这些地点的声波共鸣。",
     bgColor: "from-indigo-950 via-slate-900 to-violet-950 text-white",
