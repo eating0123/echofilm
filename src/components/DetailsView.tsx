@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { motion } from 'motion/react';
+import React from 'react';
 import { 
   ArrowLeft, 
   Share2, 
@@ -9,16 +8,13 @@ import {
   Thermometer, 
   Sparkles, 
   Sliders, 
-  ChevronRight, 
   Play, 
   Pause, 
-  Mail, 
-  Compass, 
-  BookOpen, 
-  User 
+  Mail
 } from 'lucide-react';
 import { detailSongs } from '../data';
 import { ActivePage, DetailSong } from '../types';
+import { useAudioPlayer } from '../AudioContext';
 
 interface DetailsViewProps {
   onNavigate: (page: ActivePage) => void;
@@ -26,20 +22,16 @@ interface DetailsViewProps {
 }
 
 export default function DetailsView({ onNavigate, onPlayMemory }: DetailsViewProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [playingSong, setPlayingSong] = useState<string | null>(null);
+  const { currentSong, isPlaying, toggle } = useAudioPlayer();
 
   const handlePlayRecap = () => {
-    setIsPlaying(!isPlaying);
-    onPlayMemory(detailSongs);
+    // Play the first song in the list
+    const first = detailSongs[0];
+    toggle({ title: first.title, artist: first.artist, coverUrl: first.coverUrl, previewUrl: first.previewUrl });
   };
 
   const handleSongPlay = (song: DetailSong) => {
-    if (playingSong === song.title) {
-      setPlayingSong(null);
-    } else {
-      setPlayingSong(song.title);
-    }
+    toggle({ title: song.title, artist: song.artist, coverUrl: song.coverUrl, previewUrl: song.previewUrl });
   };
 
   return (
@@ -140,7 +132,7 @@ export default function DetailsView({ onNavigate, onPlayMemory }: DetailsViewPro
             </div>
             
             <p className="font-serif text-[13.5px] italic text-slate-600 leading-relaxed">
-              “四月的鼓浪屿，阳光穿透榕树叶缝……你坐在日光岩的顶峰，耳边循环播放着《晴天》。”
+              "日光岩顶上风很大，你把帽子按住才没被吹跑。《晴天》放到副歌的时候海面碎成一整片金箔，26度，微风不燥。"
             </p>
           </div>
         </section>
@@ -158,7 +150,7 @@ export default function DetailsView({ onNavigate, onPlayMemory }: DetailsViewPro
 
           <div className="space-y-3">
             {detailSongs.map((song) => {
-              const isSongActive = playingSong === song.title;
+              const isSongActive = currentSong?.previewUrl === song.previewUrl && isPlaying;
               return (
                 <div
                   key={song.title}
@@ -205,7 +197,7 @@ export default function DetailsView({ onNavigate, onPlayMemory }: DetailsViewPro
           onClick={handlePlayRecap}
           className="flex-1 h-11 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl active:scale-95 transition-all flex items-center justify-center gap-1.5 shadow-md shadow-indigo-600/15"
         >
-          {isPlaying ? <Pause size={13} /> : <Play size={13} />}
+          {(isPlaying && currentSong?.previewUrl === detailSongs[0].previewUrl) ? <Pause size={13} /> : <Play size={13} />}
           <span>播放这段回忆</span>
         </button>
 

@@ -23,6 +23,7 @@ export interface MemoryCard {
   coverUrl: string;
   weather: string;
   city: string;
+  previewUrl?: string;
 }
 
 export interface DetailSong {
@@ -30,6 +31,15 @@ export interface DetailSong {
   artist: string;
   repeats: number;
   coverUrl: string;
+  previewUrl: string;
+}
+
+export interface SongPreviewMap {
+  [songName: string]: {
+    artist: string;
+    previewUrl: string;
+    coverUrl?: string;
+  };
 }
 
 export interface PostcardTemplate {
@@ -49,6 +59,17 @@ export interface TimelineNode {
   weather: string;
   infoLabel?: string;
   colorHex: string;
+}
+
+export interface TimelineTrip {
+  id: string;
+  city: string;
+  title: string;
+  subtitle: string;
+  dateRange: string;
+  coverUrl: string;
+  quote: string;
+  nodes: TimelineNode[];
 }
 
 export interface ReportSlide {

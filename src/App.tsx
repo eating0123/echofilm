@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { ActivePage } from './types';
+import { AudioProvider } from './AudioContext';
 import MapView from './components/MapView';
 import DetailsView from './components/DetailsView';
 import PushView from './components/PushView';
 import PostcardView from './components/PostcardView';
 import TimelineView from './components/TimelineView';
 import ReportView from './components/ReportView';
+import MiniPlayer from './components/MiniPlayer';
 import { Compass, BookOpen, Mail, User } from 'lucide-react';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<ActivePage>('map');
+  const [timelineTripCity, setTimelineTripCity] = useState<string | null>(null);
 
   // Multi-route rendering selector
   const renderPage = () => {
@@ -19,8 +22,8 @@ export default function App() {
           <MapView
             onNavigate={setCurrentPage}
             onSelectMemory={(m) => {
-              // Clicking any memory redirects to our Location details page
-              setCurrentPage('details');
+              setTimelineTripCity(m.city);
+              setCurrentPage('timeline');
             }}
             onAddMemory={() => {
               alert('🎙️ 时空音频寻轨成功！根据此地声波环境特征与经纬度共振，已成功为你绑定当前播放的音乐，封存为一帧新 EchoFilm！');
@@ -51,7 +54,7 @@ export default function App() {
       case 'postcard':
         return <PostcardView onNavigate={setCurrentPage} />;
       case 'timeline':
-        return <TimelineView onNavigate={setCurrentPage} />;
+        return <TimelineView onNavigate={setCurrentPage} initialCity={timelineTripCity} />;
       case 'report':
         return <ReportView onNavigate={setCurrentPage} />;
       default:
@@ -68,6 +71,7 @@ export default function App() {
   };
 
   return (
+    <AudioProvider>
     <div className="w-screen h-screen h-[100dvh] max-h-screen bg-slate-900 flex flex-col items-center justify-center select-none relative overflow-hidden">
       {/* Abstract background ambient glowing decorations to enrich the design */}
       <div className="absolute top-[10%] left-[8%] w-80 h-80 bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
@@ -78,6 +82,9 @@ export default function App() {
         <div className="flex-1 w-full h-full relative z-10 bg-white overflow-hidden">
           {renderPage()}
         </div>
+
+        {/* Global Mini Player */}
+        <MiniPlayer />
 
         {currentPage !== 'push' && (
           <nav 
@@ -147,5 +154,6 @@ export default function App() {
         )}
       </main>
     </div>
+    </AudioProvider>
   );
 }

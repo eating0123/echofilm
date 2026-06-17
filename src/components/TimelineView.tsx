@@ -1,42 +1,51 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  ArrowLeft, 
-  Compass, 
-  BookOpen, 
-  Mail, 
-  User, 
   Mic, 
   Square, 
   Train, 
   Ship, 
   CloudRain, 
   Calendar, 
-  Sparkles, 
   Music, 
   Play, 
-  RefreshCw,
+  Pause,
   Menu,
-  Settings
+  Settings,
+  ChevronLeft,
+  ChevronRight,
+  MapPin
 } from 'lucide-react';
-import { timelineNodes } from '../data';
-import { ActivePage, TimelineNode } from '../types';
+import { timelineTrips, songPreviewMap } from '../data';
+import { ActivePage, TimelineTrip } from '../types';
+import { useAudioPlayer } from '../AudioContext';
 
 interface TimelineViewProps {
   onNavigate: (page: ActivePage) => void;
+  initialCity?: string | null;
 }
 
-export default function TimelineView({ onNavigate }: TimelineViewProps) {
-  const [activeSong, setActiveSong] = useState<string | null>(null);
+export default function TimelineView({ onNavigate, initialCity }: TimelineViewProps) {
+  const { currentSong, isPlaying, toggle } = useAudioPlayer();
+  const getInitialIndex = () => {
+    if (initialCity) {
+      const idx = timelineTrips.findIndex(t => t.city === initialCity);
+      return idx >= 0 ? idx : 0;
+    }
+    return 0;
+  };
+  const [activeTripIndex, setActiveTripIndex] = useState(getInitialIndex);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingSeconds, setRecordingSeconds] = useState(0);
   const [recordTimer, setRecordTimer] = useState<any>(null);
+
+  const activeTrip = timelineTrips[activeTripIndex];
 
   const handleMicClick = () => {
     if (isRecording) {
       clearInterval(recordTimer);
       setIsRecording(false);
-      alert('🎙️ 声音印记录制成功！已将“厦门市曾厝垵”这一秒的声音样本与你耳机中的《后来的我们》进行声纹融合绑定。');
+      alert('🎙️ 声音印记录制成功！已将当前位置的环境声纹与播放中的音乐进行融合绑定。');
     } else {
       setIsRecording(true);
       setRecordingSeconds(0);
@@ -48,15 +57,26 @@ export default function TimelineView({ onNavigate }: TimelineViewProps) {
   };
 
   const handleSongClick = (songName: string) => {
-    if (activeSong === songName) {
-      setActiveSong(null);
-    } else {
-      setActiveSong(songName);
-      const audioTip = document.createElement('div');
-      audioTip.className = "fixed bottom-24 left-1/2 -translate-x-1/2 z-50 py-2.5 px-5 bg-indigo-950 text-white rounded-full text-xs shadow-xl flex items-center gap-2 border border-indigo-700/50 max-w-xs text-center";
-      audioTip.innerHTML = `<span>🔊 正在时空调频唤醒 《${songName}》...</span>`;
-      document.body.appendChild(audioTip);
-      setTimeout(() => audioTip.remove(), 2500);
+    const cleanName = songName.replace(/\s*\(\d+次\)/, '');
+    const songInfo = songPreviewMap[cleanName];
+    if (songInfo) {
+      toggle({
+        title: cleanName,
+        artist: songInfo.artist,
+        coverUrl: songInfo.coverUrl,
+        previewUrl: songInfo.previewUrl
+      });
+    }
+  };
+
+  const handlePlayFirstSong = () => {
+    const firstNode = activeTrip.nodes[0];
+    if (firstNode && firstNode.songs.length > 0) {
+      const cleanName = firstNode.songs[0].replace(/\s*\(\d+次\)/, '');
+      const songInfo = songPreviewMap[cleanName];
+      if (songInfo) {
+        toggle({ title: cleanName, artist: songInfo.artist, previewUrl: songInfo.previewUrl, coverUrl: songInfo.coverUrl });
+      }
     }
   };
 
@@ -93,7 +113,7 @@ export default function TimelineView({ onNavigate }: TimelineViewProps) {
               正在采集现场环境声纹...
             </h3>
             <p className="text-slate-300 text-xs text-center max-w-[240px] leading-relaxed mb-6">
-              EchoFilm 将采集这一刻的微弱风声、海岛浪鸣及风声，与你此时此刻播放的音乐融为一体……
+              EchoFilm 将采集这一刻的微弱风声与环境音，与你此时此刻播放的音乐融为一体……
             </p>
 
             <div className="font-mono text-2xl font-bold bg-white/10 px-4 py-1 rounded-full mb-8">
@@ -134,32 +154,72 @@ export default function TimelineView({ onNavigate }: TimelineViewProps) {
 
       {/* Main scrolling wrapper */}
       <div className="flex-1 overflow-y-auto no-scrollbar pt-16 pb-40">
-        {/* Parallax shoreline sunset background */}
-        <section className="relative h-[220px] w-full flex flex-col justify-end p-5 overflow-hidden">
+        {/* Trip Switcher Tabs */}
+        <section className="px-5 pt-4 pb-2">
+          <div className="flex gap-2 overflow-x-auto no-scrollbar">
+            {timelineTrips.map((trip, idx) => (
+              <button
+                key={trip.id}
+                onClick={() => setActiveTripIndex(idx)}
+                className={`shrink-0 px-4 py-2 rounded-full text-[11px] font-bold transition-all border ${
+                  idx === activeTripIndex
+                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                    : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-200'
+                }`}
+              >
+                <span className="flex items-center gap-1.5">
+                  <MapPin size={10} />
+                  {trip.city} · {trip.dateRange}
+                </span>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* Parallax cover background */}
+        <section className="relative h-[200px] w-full flex flex-col justify-end p-5 overflow-hidden mx-0">
           <div className="absolute inset-0 bg-gradient-to-tr from-slate-900 via-indigo-900 to-amber-700 z-0">
             <img
-              alt="鼓浪屿海边夕阳"
+              alt={activeTrip.title}
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover opacity-60 select-none"
-              src="https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&q=80&w=600"
+              src={activeTrip.coverUrl}
             />
           </div>
           
           <div className="relative z-10 text-white space-y-1 pb-4">
-            <h2 className="font-display font-black text-[23px] tracking-tight leading-none text-white drop-shadow-md">
-              厦门三日 · 音乐日记
+            <h2 className="font-display font-black text-[22px] tracking-tight leading-none text-white drop-shadow-md">
+              {activeTrip.title}
             </h2>
             <p className="text-[9.5px] font-bold text-slate-200 uppercase tracking-wider">
-              2026.04.02 - 04.04 · 3天 · 12个地点 · 18首歌
+              {activeTrip.subtitle}
             </p>
           </div>
+
+          {/* Left/Right arrows for quick switch */}
+          {activeTripIndex > 0 && (
+            <button
+              onClick={() => setActiveTripIndex(activeTripIndex - 1)}
+              className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center active:scale-90 backdrop-blur-sm"
+            >
+              <ChevronLeft size={14} />
+            </button>
+          )}
+          {activeTripIndex < timelineTrips.length - 1 && (
+            <button
+              onClick={() => setActiveTripIndex(activeTripIndex + 1)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center active:scale-90 backdrop-blur-sm"
+            >
+              <ChevronRight size={14} />
+            </button>
+          )}
         </section>
 
         {/* Narrative core block quotes overlay */}
         <section className="px-5 -mt-6 relative z-20 mb-5">
           <div className="bg-white rounded-2xl p-4 border border-indigo-100 shadow-md">
             <p className="font-serif italic text-indigo-600 text-[13px] leading-relaxed">
-              音乐记得那些你忘了拍照的瞬间。
+              {activeTrip.quote}
             </p>
           </div>
         </section>
@@ -169,7 +229,7 @@ export default function TimelineView({ onNavigate }: TimelineViewProps) {
           {/* Continuous left border line */}
           <div className="absolute left-[26px] top-2 bottom-4 w-[2px] bg-indigo-100 rounded-full" />
 
-          {timelineNodes.map((node) => (
+          {activeTrip.nodes.map((node) => (
             <div key={node.day} className="relative pl-9 mb-6">
               {/* Timeline active sphere dot */}
               <div
@@ -178,7 +238,8 @@ export default function TimelineView({ onNavigate }: TimelineViewProps) {
               />
 
               <div
-                className="bg-white border border-slate-100 rounded-2xl p-4.5 shadow-sm flex flex-col gap-3"
+                onClick={() => onNavigate('details')}
+                className="bg-white border border-slate-100 rounded-2xl p-4.5 shadow-sm flex flex-col gap-3 cursor-pointer active:scale-[0.99] transition-transform"
               >
                 {/* Header segment */}
                 <div className="flex justify-between items-start">
@@ -198,11 +259,11 @@ export default function TimelineView({ onNavigate }: TimelineViewProps) {
                   </div>
                 </div>
 
-                {/* Sub info progress panel inside Day 2 */}
+                {/* Sub info progress panel */}
                 {node.infoLabel && (
                   <div className="bg-amber-50/40 rounded-xl p-3 border border-amber-100/55 flex flex-col gap-1.5">
                     <div className="flex items-center justify-between text-amber-800 text-[10px] font-bold">
-                      <span>累计聆听 3h 42m</span>
+                      <span>{node.infoLabel}</span>
                     </div>
                   </div>
                 )}
@@ -213,9 +274,10 @@ export default function TimelineView({ onNavigate }: TimelineViewProps) {
                 </p>
 
                 {/* Songs caps sliders list */}
-                <div className="flex flex-wrap gap-2 pt-1">
+                <div className="flex flex-wrap gap-2 pt-1" onClick={(e) => e.stopPropagation()}>
                   {node.songs.map((song) => {
-                    const isSongActive = activeSong === song;
+                    const cleanName = song.replace(/\s*\(\d+次\)/, '');
+                    const isSongActive = isPlaying && currentSong?.title === cleanName;
                     return (
                       <button
                         key={song}
@@ -223,7 +285,7 @@ export default function TimelineView({ onNavigate }: TimelineViewProps) {
                         className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10.5px] font-semibold transition-all outline-none ${isSongActive ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm scale-102' : 'bg-slate-50 text-slate-700 border-slate-200/80 hover:border-indigo-200'}`}
                       >
                         {isSongActive ? (
-                          <RefreshCw size={11} className="animate-spin text-white" />
+                          <Pause size={11} className="text-white" />
                         ) : (
                           <Music size={11} className="text-indigo-600" />
                         )}
@@ -240,10 +302,10 @@ export default function TimelineView({ onNavigate }: TimelineViewProps) {
         {/* Global travel sync buttons actions */}
         <section className="px-5 mt-4 space-y-2.5">
           <button
-            onClick={() => alert('🎵 正在为你缓存并生成“厦门三日·18首音乐回忆歌单”...')}
+            onClick={handlePlayFirstSong}
             className="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs shadow-md active:scale-95 transition-all flex items-center justify-center gap-1.5 shadow-indigo-600/10"
           >
-            <Play size={13} />
+            {isPlaying ? <Pause size={13} /> : <Play size={13} />}
             <span>开启旅程广播</span>
           </button>
         </section>
@@ -254,7 +316,7 @@ export default function TimelineView({ onNavigate }: TimelineViewProps) {
         <button
           onClick={handleMicClick}
           className="relative w-12 h-12 rounded-full bg-indigo-600 text-white shadow-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-transform border-2 border-white"
-          title="录制现场环境微弱风声"
+          title="录制现场环境声纹"
         >
           <Mic size={20} />
         </button>

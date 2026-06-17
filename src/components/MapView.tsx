@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { motion } from 'motion/react';
+import { useAudioPlayer } from '../AudioContext';
 import { 
   Compass, 
   BookOpen, 
@@ -33,6 +34,7 @@ interface MapViewProps {
 
 export default function MapView({ onNavigate, onSelectMemory, onAddMemory }: MapViewProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { currentSong } = useAudioPlayer();
 
   const renderBubbleIcon = (iconName: string, size = 16) => {
     switch (iconName) {
@@ -68,15 +70,11 @@ export default function MapView({ onNavigate, onSelectMemory, onAddMemory }: Map
   };
 
   const handleBubbleClick = (bubble: LocationBubble) => {
-    if (bubble.city === '厦门') {
-      onNavigate('details');
+    const foundMemory = recentMemories.find(m => m.city === bubble.city);
+    if (foundMemory) {
+      onSelectMemory(foundMemory);
     } else {
-      const foundMemory = recentMemories.find(m => m.city === bubble.city);
-      if (foundMemory) {
-        onSelectMemory(foundMemory);
-      } else {
-        alert(`🎙️ EchoFilm - ${bubble.city}\n正在载入 "${bubble.city}" 电台的 ${bubble.count} 首时空记忆声音包...`);
-      }
+      alert(`🎙️ EchoFilm - ${bubble.city}\n正在载入 "${bubble.city}" 电台的 ${bubble.count} 首时空记忆声音包...`);
     }
   };
 
@@ -183,11 +181,11 @@ export default function MapView({ onNavigate, onSelectMemory, onAddMemory }: Map
       </div>
 
       {/* Bottom sliding memories block */}
-      <div className="flex-1 px-5 pt-4 pb-24 relative z-20 bg-gradient-to-b from-white to-slate-50 border-t border-slate-150/50 -mt-2 rounded-t-[28px] shadow-lg">
+      <div className={`flex-1 px-5 pt-4 relative z-20 bg-gradient-to-b from-white to-slate-50 border-t border-slate-150/50 -mt-2 rounded-t-[28px] shadow-lg ${currentSong ? 'pb-36' : 'pb-24'}`}>
         <div className="flex justify-between items-center mb-3">
           <div>
             <h2 className="text-[15px] font-black text-slate-900 tracking-tight">
-              最近的声纹记忆
+              最近的回声记忆
             </h2>
             <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
               Recent EchoFilm
@@ -210,13 +208,7 @@ export default function MapView({ onNavigate, onSelectMemory, onAddMemory }: Map
           {recentMemories.map((memo) => (
             <div
               key={memo.id}
-              onClick={() => {
-                if (memo.city === '厦门') {
-                  onNavigate('details');
-                } else {
-                  onSelectMemory(memo);
-                }
-              }}
+              onClick={() => onSelectMemory(memo)}
               className="flex-none w-52 bg-white rounded-2xl p-2.5 flex flex-col gap-2 cursor-pointer hover:border-slate-300 hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 shadow-sm"
             >
               {/* Photo top area with badge */}

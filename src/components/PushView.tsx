@@ -19,6 +19,8 @@ import {
   Compass
 } from 'lucide-react';
 import { ActivePage } from '../types';
+import { useAudioPlayer } from '../AudioContext';
+import { songPreviewMap } from '../data';
 
 interface PushViewProps {
   onNavigate: (page: ActivePage) => void;
@@ -26,8 +28,15 @@ interface PushViewProps {
 
 export default function PushView({ onNavigate }: PushViewProps) {
   const [phase, setPhase] = useState<'lock' | 'app'>('lock');
-  const [isPlaying, setIsPlaying] = useState(false);
+  const { currentSong, isPlaying, toggle } = useAudioPlayer();
   const [notificationVisible, setNotificationVisible] = useState(false);
+
+  const xihuSong = songPreviewMap["西湖"];
+  const handlePlayXihu = () => {
+    if (xihuSong) {
+      toggle({ title: "西湖", artist: xihuSong.artist, previewUrl: xihuSong.previewUrl, coverUrl: xihuSong.coverUrl });
+    }
+  };
 
   useEffect(() => {
     // Automatically trigger notification reveal animation
@@ -39,7 +48,12 @@ export default function PushView({ onNavigate }: PushViewProps) {
 
   const handleNotificationClick = () => {
     setPhase('app');
-    setIsPlaying(true);
+    // 点击通知后自动播放《西湖》
+    if (xihuSong) {
+      setTimeout(() => {
+        toggle({ title: "西湖", artist: xihuSong.artist, previewUrl: xihuSong.previewUrl, coverUrl: xihuSong.coverUrl });
+      }, 500);
+    }
   };
 
   return (
@@ -125,7 +139,7 @@ export default function PushView({ onNavigate }: PushViewProps) {
                         重回旧地，唤醒那一秒！
                       </p>
                       <p className="text-slate-600 text-[10.5px] leading-snug break-words">
-                        上次在西湖苏堤，你慢跑了47公里，《平凡之路》伴你度过了23个金辉傍晚 🌅
+                        上次在西湖苏堤，你慢跑了47公里，《西湖》伴你度过了23个金辉傍晚 🌅
                       </p>
                     </div>
                   </motion.div>
@@ -224,26 +238,26 @@ export default function PushView({ onNavigate }: PushViewProps) {
                       陪你最久的时空曲
                     </span>
                     <h4 className="font-display font-black text-[14px] truncate text-white">
-                      平凡之路
+                      西湖
                     </h4>
                     <p className="text-[10px] text-slate-200 truncate">
-                      朴树 · 叙事民谣
+                      痛仰乐队 · 摇滚民谣
                     </p>
                   </div>
                 </div>
 
                 <button 
-                  onClick={() => setIsPlaying(!isPlaying)}
+                  onClick={handlePlayXihu}
                   className="w-9 h-9 rounded-full bg-white text-indigo-600 flex items-center justify-center active:scale-90 transition-all shadow shrink-0 ml-2"
                 >
-                  {isPlaying ? <Pause size={15} /> : <Play size={15} />}
+                  {(isPlaying && currentSong?.title === "西湖") ? <Pause size={15} /> : <Play size={15} />}
                 </button>
               </div>
 
               {/* Quotes story section */}
               <div className="bg-white border border-slate-150 rounded-2xl p-4 shadow-sm">
                 <p className="font-serif italic text-slate-700 text-[13px] leading-relaxed mb-3">
-                  “我曾经跨过山和大海，也穿过人山人海……西湖落日熔金的苏堤和断桥边，耳机里正巧唱到这。你和西湖，就在这一秒被声音紧紧捏合在一起。”
+                  "西湖落日熔金，苏堤上跑步的人渐渐少了。耳机里痛仰唱'再也没有留恋的斜阳'——你放慢脚步，觉得自己真的可以就这样沉进湖底的晚霞里。"
                 </p>
                 <div className="flex items-center gap-1.5 text-indigo-600">
                   <MapPin size={11} />
@@ -273,10 +287,10 @@ export default function PushView({ onNavigate }: PushViewProps) {
 
               <div className="flex-1 min-w-0 pr-1">
                 <h4 className="text-[12px] font-bold text-slate-805 truncate">
-                  平凡之路
+                  西湖
                 </h4>
                 <p className="text-[9.5px] text-slate-400 font-bold font-mono uppercase">
-                  朴树 - {isPlaying ? '正在深浸回放' : '已暂停'}
+                  痛仰乐队 - {isPlaying ? '正在深浸回放' : '已暂停'}
                 </p>
               </div>
 
@@ -286,10 +300,10 @@ export default function PushView({ onNavigate }: PushViewProps) {
                   <SkipBack size={14} />
                 </button>
                 <button 
-                  onClick={() => setIsPlaying(!isPlaying)}
+                  onClick={handlePlayXihu}
                   className="p-1 active:scale-95 text-indigo-600"
                 >
-                  {isPlaying ? <Pause size={18} /> : <Play size={18} />}
+                  {(isPlaying && currentSong?.title === "西湖") ? <Pause size={18} /> : <Play size={18} />}
                 </button>
                 <button className="text-slate-400 p-1 active:scale-95">
                   <SkipForward size={14} />
