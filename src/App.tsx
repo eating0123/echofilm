@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ActivePage } from './types';
 import { AudioProvider } from './AudioContext';
+import SplashScreen from './components/SplashScreen';
 import MapView from './components/MapView';
 import DetailsView from './components/DetailsView';
 import PushView from './components/PushView';
@@ -11,8 +12,11 @@ import MiniPlayer from './components/MiniPlayer';
 import { Compass, BookOpen, Mail, User } from 'lucide-react';
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
   const [currentPage, setCurrentPage] = useState<ActivePage>('map');
   const [timelineTripCity, setTimelineTripCity] = useState<string | null>(null);
+
+  const handleSplashFinish = useCallback(() => setShowSplash(false), []);
 
   // Multi-route rendering selector
   const renderPage = () => {
@@ -79,6 +83,9 @@ export default function App() {
 
       {/* Directly render the application centered shell, natively scaling on both modern mobile screens and desktop monitors */}
       <main className="w-full max-w-lg h-screen h-[100dvh] md:h-[800px] md:max-h-[92vh] md:my-4 md:rounded-[36px] bg-white shadow-2xl overflow-hidden flex flex-col relative border border-slate-100/60">
+        {/* Splash Screen */}
+        {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
+
         <div className="flex-1 w-full h-full relative z-10 bg-white overflow-hidden">
           {renderPage()}
         </div>
